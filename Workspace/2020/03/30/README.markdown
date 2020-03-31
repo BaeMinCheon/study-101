@@ -62,6 +62,9 @@ http://algospot.com/*
 - iterate the array and print each string
     - iterate printing each string as many as size of array
 
+### *Code*
+look for the `main.cpp` in current directory
+
 ### *Note*
 - `input: 25%2525%2525` should be `output: 25%25%25`
 ```
