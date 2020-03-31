@@ -14,7 +14,7 @@ URI (Uniform Resource Identifier) is a compact string used to identify or name r
 When transmitting *URI*s through the Internet, we escape some special characters in *URI*s with percent-encoding. Percent-encoding encodes an ASCII character into a percent sign ("%") followed by a two-digit Hexadecimal representation of the ASCII number. The other characters are not touched in the encoding process. The following table shows the special characters and their corresponding encodings:
 
 Special Character | Encoded String
-- | -
+--- | ---
 `" "` | %20
 `"!"` | %21
 `"$"` | %24
