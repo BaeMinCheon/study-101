@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 class Solver
 {
@@ -16,17 +17,120 @@ private:
 	void Solve()
 	{
 		AnswerContainer.clear();
-
-		for (const std::vector<int>& Testcase : TestcaseContainer)
+		for (std::vector<int>& Testcase : TestcaseContainer)
 		{
 			int Answer = GetAnswer(Testcase);
+			if (Answer == std::numeric_limits<int>::max())
+			{
+				Answer = -1;
+			}
 			AnswerContainer.push_back(Answer);
 		}
 	}
 
-	int GetAnswer(const std::vector<int>& Clocks)
+	int GetAnswer(std::vector<int>& Clocks)
 	{
-		;
+		int ReturnValue = std::numeric_limits<int>::max();
+		for (int Index = 0; Index < 4; ++Index)
+		{
+			int Value = GetAnswerRecursive(Clocks, 0, Index);
+			ReturnValue = std::min(ReturnValue, Value);
+		}
+		return ReturnValue;
+	}
+
+	int GetAnswerRecursive(std::vector<int>& Clocks, int SwitchIndex, int PushCount)
+	{
+		int ReturnValue = std::numeric_limits<int>::max();
+
+		if (SwitchIndex >= SwitchContainer.size())
+		{
+			return ReturnValue;
+		}
+		else
+		{
+			for (int Index = 0; Index < PushCount; ++Index)
+			{
+				PushSwitch(Clocks, SwitchIndex);
+			}
+
+			if (IsComplete(Clocks))
+			{
+				ReturnValue = PushCount;
+			}
+			else
+			{
+				for (int Index = 0; Index < 4; ++Index)
+				{
+					int Value = GetAnswerRecursive(Clocks, SwitchIndex + 1, Index);
+					if (Value != std::numeric_limits<int>::max())
+					{
+						ReturnValue = std::min(ReturnValue, Value);
+					}
+				}
+
+				if (ReturnValue != std::numeric_limits<int>::max())
+				{
+					ReturnValue += PushCount;
+				}
+			}
+
+			for (int Index = 0; Index < PushCount; ++Index)
+			{
+				UndoSwitch(Clocks, SwitchIndex);
+			}
+
+			return ReturnValue;
+		}
+	}
+
+	void PushSwitch(std::vector<int>& Clocks, int SwitchIndex)
+	{
+		ManipulateSwitch(Clocks, SwitchIndex, +3);
+	}
+
+	void UndoSwitch(std::vector<int>& Clocks, int SwitchIndex)
+	{
+		ManipulateSwitch(Clocks, SwitchIndex, -3);
+	}
+
+	void ManipulateSwitch(std::vector<int>& Clocks, int SwitchIndex, int Delta)
+	{
+		if ((SwitchIndex < 0) && (SwitchContainer.size() <= SwitchIndex))
+		{
+			return;
+		}
+
+		const std::vector<int>& Switch = SwitchContainer[SwitchIndex];
+		for (int ClockIndex : Switch)
+		{
+			int& Clock = Clocks[ClockIndex];
+			Clock += Delta;
+			if (Clock > 12)
+			{
+				Clock = 3;
+			}
+			if (Clock <= 0)
+			{
+				Clock = 12;
+			}
+		}
+	}
+
+	bool IsComplete(const std::vector<int>& Clocks)
+	{
+		bool ReturnValue = true;
+
+		for (int Clock : Clocks)
+		{
+			if (Clock != 12)
+			{
+				ReturnValue = false;
+				break;
+			}
+		}
+
+		return ReturnValue;
 	}
 
 	void Print()
@@ -95,7 +199,7 @@ private:
 			for (const int Clock : Clocks)
 			{
 				Board[Clock] += 3;
-				
+
 				if (Board[Clock] >= 13)
 				{
 					Board[Clock] = 3;
