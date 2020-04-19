@@ -26,67 +26,7 @@ private:
 
 	int GetAnswer(const std::vector<int>& Clocks)
 	{
-		if (IsValid(Clocks) == false)
-		{
-			return -1;
-		}
-
-		std::vector<int> Switches(10);
-		Switches[0] = Clocks[5] + Clocks[8] + Clocks[11] - Clocks[1] - Clocks[7] - Clocks[13];
-		Switches[1] = 12 - Clocks[11];
-		Switches[2] = Clocks[8] - Clocks[10];
-		Switches[3] = Clocks[8] - Clocks[6];
-		Switches[4] = 12 - Clocks[8];
-		Switches[5] = Clocks[1] - Clocks[2];
-		Switches[6] = Clocks[5] + Clocks[8] + (2 * Clocks[11]) - Clocks[3] - Clocks[7] - 24;
-		Switches[7] = Clocks[6] + Clocks[11] - Clocks[7] - 12;
-		Switches[8] = Clocks[7] + Clocks[13] - Clocks[5] - Clocks[8] - Clocks[11] + 12;
-		Switches[9] = 12 - Clocks[13];
-
-		int HourSum = 0;
-		for (int& HoursToWind : Switches)
-		{
-			if (HoursToWind < 0)
-			{
-				HoursToWind = 12 + HoursToWind;
-			}
-
-			HourSum += HoursToWind;
-		}
-
-		return HourSum / 3;
-	}
-
-	bool IsValid(const std::vector<int>& Clocks)
-	{
-		bool ReturnValue = true;
-
-		if (Clocks.size() < 16)
-		{
-			ReturnValue = false;
-		}
-		else if (Clocks[8] != Clocks[12])
-		{
-			ReturnValue = false;
-		}
-		else if ((Clocks[9] - Clocks[11] - Clocks[13]) != -12)
-		{
-			ReturnValue = false;
-		}
-		else if (Clocks[14] != Clocks[15])
-		{
-			ReturnValue = false;
-		}
-		else if ((Clocks[5] + Clocks[10]) != (Clocks[4] + Clocks[8]))
-		{
-			ReturnValue = false;
-		}
-		else if ((Clocks[2] + Clocks[6] + Clocks[7] + Clocks[13] + 12) != (Clocks[0] + Clocks[5] + (2 * Clocks[8]) + Clocks[11]))
-		{
-			ReturnValue = false;
-		}
-
-		return ReturnValue;
+		;
 	}
 
 	void Print()

@@ -47,13 +47,10 @@ Output
 
 ---
 
-# Solution
+# Solution #1
 
-### *Design*
-- ㅇ
-
-### *Code*
-look for the `main.cpp` in current directory
+### *Concept*
+- let us find the answer with simultaneous equations
 
 ### *Note*
 - simulation with example #1
@@ -140,7 +137,7 @@ switch | variable | value
 4 | e | `12 - n#8` or `12 - n#12`
 9 | j | `12 - n#13`
 
-### iteration #1
+### *iteration #1*
 
 clock | equation #1 | equation #2
 --- | --- | ---
@@ -177,7 +174,7 @@ switch | variable | value
 8 | i
 9 | j | `12 - n#13`
 
-### iteration #2
+### *iteration #2*
 clock | equation #1 | equation #2
 --- | --- | ---
 0 | `12 = n#0 + a + (n#8 - n#6) + f` | `n#6 - n#0 - n#8 + 12 = a + f`
@@ -214,7 +211,7 @@ switch | variable | value
 8 | i
 9 | j | `12 - n#13`
 
-### iteration #3
+### *iteration #3*
 clock | equation #1 | equation #2
 --- | --- | ---
 0 | `n#6 - n#0 - n#8 + 12 = a + f`
@@ -247,7 +244,7 @@ switch | variable | value
 8 | i | `n#7 + n#13 - n#5 - n#8 - n#11 + 12` or `n#7 + n#10 + n#13 - n#4 - 2*n#8 - n#11 + 12`
 9 | j | `12 - n#13`
 
-### iteration #4
+### *iteration #4*
 clock | equation #1 | equation #2
 --- | --- | ---
 0 | `n#6 - n#0 - n#8 + 12 = a + f`
@@ -283,7 +280,7 @@ switch | variable | value
 8 | i | `n#7 + n#13 - n#5 - n#8 - n#11 + 12` or `n#7 + n#10 + n#13 - n#4 - 2*n#8 - n#11 + 12`
 9 | j | `12 - n#13`
 
-### iteration #5
+### *iteration #5*
 clock | equation #1 | equation #2
 --- | --- | ---
 0 | `n#6 - n#0 - n#8 + 12 = (n#5 + n#8 + n#11 - n#1 - n#7 - n#13) + f` | `n#1 + n#6 + n#7 + n#13 - n#0 - n#5 - 2*n#8 - n#11 + 12 = f`
@@ -346,3 +343,124 @@ switch | variable | value | example #2
 7 | h | `n#6 + n#11 - n#7 - 12` | `9 + 9 - 3 - 12 = 3`
 8 | i | `n#7 + n#13 - n#5 - n#8 - n#11 + 12` | `3 + 12 - 6 - 12 - 9 + 12 = 0`
 9 | j | `12 - n#13` | `12 - 12 = 0`
+
+### *Conclusion*
+- could not find the answer with simultaneous equations
+- there are number of testcases that require `return -1` and we cannot solve them
+
+---
+
+# Solution #2
+
+### *Concept*
+- let us find the answer with full search
+
+### *Note*
+- using recursive call
+- start
+    - switch #0: push 0 time(s)
+        - switch #1: push 0 time(s)
+            - switch #2: push 0 time(s)
+                - switch #3: push 0 time(s)
+                    - ...
+            - switch #2: push 1 time(s)
+                - ...
+            - switch #2: push 2 time(s)
+                - ...
+            - switch #2: push 3 time(s)
+                - ...
+        - switch #1: push 1 time(s)
+            - ...
+        - switch #1: push 2 time(s)
+            - ...
+        - switch #1: push 3 time(s)
+            - ...
+    - switch #0: push 1 time(s)
+        - ...
+    - switch #0: push 2 time(s)
+        - ...
+    - switch #0: push 3 time(s)
+        - ...
+
+### *Design*
+- prepare look-up table for switches
+```cpp
+const std::vector<std::vector<int>> SwitchContainer
+{
+    {	0,	1,	2			},
+    {	3,	7,	9,	11		},
+    {	4,	10,	14,	15		},
+    {	0,	4,	5,	6,	7	},
+    {	6,	7,	8,	10,	12	},
+    {	0,	2,	14,	15		},
+    {	3,	14,	15			},
+    {	4,	5,	7,	14,	15	},
+    {	1,	2,	3,	4,	5	},
+    {	3,	4,	5,	9,	13	}
+};
+```
+
+- iterate with number of push on each switch and recur with number of switches
+```cpp
+int GetAnswer(...)
+{
+    ...
+
+    for(int Index = 0; Index < 4; ++Index)
+    {
+        int Value = GetAnswerRecursive(Switch@0, ...);
+        std::min(ReturnValue, Value);
+    }
+
+    ...
+}
+
+int GetAnswerRecursive(...)
+{
+    ...
+
+    for(int Index = 0; Index < 4; ++Index)
+    {
+        int Value = GetAnswerRecursive(Switch@(n+1), ...);
+        std::min(ReturnValue, Value);
+    }
+
+    ...
+}
+```
+
+- prevent the overhead of creating container object
+    - focus on the parameter of `GetAnswerRecursive`
+```cpp
+int GetAnswerRecursive(std::vector<int>& Clocks, ...)
+{
+    ...
+
+    for (int Index = 0; Index < PushCount; ++Index)
+    {
+        PushSwitch(Clocks, SwitchIndex);
+    }
+
+    ...
+
+    for (int Index = 0; Index < PushCount; ++Index)
+    {
+        UndoSwitch(Clocks, SwitchIndex);
+    }
+
+    ...
+}
+
+void PushSwitch(std::vector<int>& Clocks, int SwitchIndex)
+{
+    ManipulateSwitch(Clocks, SwitchIndex, +3);
+}
+
+void UndoSwitch(std::vector<int>& Clocks, int SwitchIndex)
+{
+    ManipulateSwitch(Clocks, SwitchIndex, -3);
+}
+```
+
+### *Code*
+look for the `main.cpp` in current directory
