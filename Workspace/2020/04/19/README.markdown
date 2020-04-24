@@ -40,117 +40,123 @@ Output
 
 ---
 
-# Solution
+# Solution #1
 
 ### *Concept*
-- let us find the answer with full search
+- find the answer with full search
 
 ### *Note*
-- using recursive call
-- start
-    - switch #0: push 0 time(s)
-        - switch #1: push 0 time(s)
-            - switch #2: push 0 time(s)
-                - switch #3: push 0 time(s)
-                    - ...
-            - switch #2: push 1 time(s)
+- iterate cities as a starting point
+    - city #0
+        - city #1
+            - city #2
                 - ...
-            - switch #2: push 2 time(s)
-                - ...
-            - switch #2: push 3 time(s)
-                - ...
-        - switch #1: push 1 time(s)
             - ...
-        - switch #1: push 2 time(s)
+        - city #2
             - ...
-        - switch #1: push 3 time(s)
-            - ...
-    - switch #0: push 1 time(s)
+    - city #1
         - ...
-    - switch #0: push 2 time(s)
+    - ...
+
+![](https://github.com/BaeMinCheon/study-101/blob/master/Workspace/2020/04/19/Images/01.jpg)
+
+- city #0
+    - city #1
+        - city #2 → `(0 -> 1 -> 2)`
+    - city #2
+        - city #1 → `(0 -> 2 -> 1)`
+- city #1
+    - city #0
+        - city #2 → `(1 -> 0 -> 2) = 1260.3657842490`
+    - city #2
+        - city #0 → `(1 -> 2 -> 0)`
+- city #2
+    - city #0
+        - city #1 → `(2 -> 0 -> 1) = 1260.3657842490`
+    - city #1
+        - city #0 → `(2 -> 1 -> 0)`
+
+![](https://github.com/BaeMinCheon/study-101/blob/master/Workspace/2020/04/19/Images/02.jpg)
+
+- city #0
+    - city #1
+        - city #2
+            - city #3 → `(0 -> 1 -> 2 -> 3)`
+        - city #3
+            - city #2 → `(0 -> 1 -> 3 -> 2)` 
+    - city #2
+        - city #1
+            - city #3 → `(0 -> 2 -> 1 -> 3)` 
+        - city #3
+            - city #1 → `(0 -> 2 -> 3 -> 1)` 
+- city #1
+    - ...
+- city #2
+    - city #0
         - ...
-    - switch #0: push 3 time(s)
+    - city #1
+        - city #0
+            - city #3 → `(2 -> 1 -> 0 -> 3) = 841.2045646020`
         - ...
+    - ...
+- ...
 
 ### *Design*
-- prepare look-up table for switches
-```cpp
-const std::vector<std::vector<int>> SwitchContainer
-{
-    {	0,	1,	2			},
-    {	3,	7,	9,	11		},
-    {	4,	10,	14,	15		},
-    {	0,	4,	5,	6,	7	},
-    {	6,	7,	8,	10,	12	},
-    {	0,	2,	14,	15		},
-    {	3,	14,	15			},
-    {	4,	5,	7,	14,	15	},
-    {	1,	2,	3,	4,	5	},
-    {	3,	4,	5,	9,	13	}
-};
-```
-
 - iterate with number of push on each switch and recur with number of switches
 ```cpp
-int GetAnswer(...)
+double GetAnswer()
 {
+    double ReturnValue = std::numeric_limits<double>::max();
     ...
-
-    for(int Index = 0; Index < 4; ++Index)
+    for (int Index = 0; Index < Testcase.size(); ++Index)
     {
-        int Value = GetAnswerRecursive(Switch@0, ...);
-        std::min(ReturnValue, Value);
+        ...
     }
-
-    ...
+    return ReturnValue;
 }
 
-int GetAnswerRecursive(...)
+double GetAnswerRecursive(...)
 {
+    double ReturnValue = std::numeric_limits<double>::max();
     ...
-
-    for(int Index = 0; Index < 4; ++Index)
-    {
-        int Value = GetAnswerRecursive(Switch@(n+1), ...);
-        std::min(ReturnValue, Value);
-    }
-
-    ...
+    return ReturnValue;
 }
 ```
 
 - prevent the overhead of creating container object
     - focus on the parameter of `GetAnswerRecursive`
 ```cpp
-int GetAnswerRecursive(std::vector<int>& Clocks, ...)
+double GetAnswerRecursive(std::vector<bool>& VisitTable, int CityFrom)
 {
+    double ReturnValue = std::numeric_limits<double>::max();
+    VisitTable[CityFrom] = true;
     ...
-
-    for (int Index = 0; Index < PushCount; ++Index)
-    {
-        PushSwitch(Clocks, SwitchIndex);
-    }
-
-    ...
-
-    for (int Index = 0; Index < PushCount; ++Index)
-    {
-        UndoSwitch(Clocks, SwitchIndex);
-    }
-
-    ...
-}
-
-void PushSwitch(std::vector<int>& Clocks, int SwitchIndex)
-{
-    ManipulateSwitch(Clocks, SwitchIndex, +3);
-}
-
-void UndoSwitch(std::vector<int>& Clocks, int SwitchIndex)
-{
-    ManipulateSwitch(Clocks, SwitchIndex, -3);
+    VisitTable[CityFrom] = false;
+    return ReturnValue;
 }
 ```
 
 ### *Code*
-look for the `main.cpp` in current directory
+look for the `main.cpp` in current directory with first commit
+
+### *Limitation*
+it happens `Time Out` due to brute force
+
+---
+
+# Solution #2
+
+### *Concept*
+- d
+
+### *Note*
+- d
+
+### *Design*
+- d
+
+### *Code*
+look for the `main.cpp` in current directory with second commit
+
+### *Limitation*
+d
