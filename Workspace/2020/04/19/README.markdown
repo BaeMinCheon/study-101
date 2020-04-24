@@ -147,16 +147,49 @@ it happens `Time Out` due to brute force
 # Solution #2
 
 ### *Concept*
-- d
+- improve `Solution #1` with pruning
 
 ### *Note*
-- d
+suppose an example...
+- city #0
+    - city #1
+        - city #2 → `500.000`
+    - ...
+- city #1
+    - city #0 → `600.000`
+        - do not have to search this branch (pruning)
+- ...
 
 ### *Design*
-- d
+- ( in comparison to `Solution #1` ) add parameters for pruning
+```cpp
+double GetAnswer()
+{
+    double ReturnValue = std::numeric_limits<double>::max();
+    std::vector<bool> VisitTable(Testcase.size(), false);
+    for (int Index = 0; Index < Testcase.size(); ++Index)
+    {
+        double Value = GetAnswerRecursive(VisitTable, Index,
+        /*Threshold*/ ReturnValue, /*AccumulatedValue*/ 0.0);
+        ReturnValue = std::min(Value, ReturnValue);
+    }
+    return ReturnValue;
+}
+
+double GetAnswerRecursive(std::vector<bool>& VisitTable, int CityFrom, double Threshold, double AccumulatedValue)
+{
+    double ReturnValue = std::numeric_limits<double>::max();
+    VisitTable[CityFrom] = true;
+    ...
+    else if (AccumulatedValue > Threshold)
+    {
+        // do nothing
+    }
+    ...
+    VisitTable[CityFrom] = false;
+    return ReturnValue;
+}
+```
 
 ### *Code*
 look for the `main.cpp` in current directory with second commit
-
-### *Limitation*
-d
