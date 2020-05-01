@@ -91,5 +91,13 @@ foreach Number : Numbers
         return CurrentIndex
 ```
 
+- complexity
+
+```
+iteration on array: O(N)
+searching on set: O(log(N))
+∴ O(N*log(N))
+```
+
 ### *Code*
 - look for the `main.cpp` in current directory
