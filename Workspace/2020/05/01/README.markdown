@@ -49,8 +49,9 @@ the function should return [1, 2, 3, 4]
 
 Assume that:
 
-N and K are integers within the range [0..100];
-each element of array A is an integer within the range [−1,000..1,000].
+- N and K are integers within the range [0..100];
+- each element of array A is an integer within the range [−1,000..1,000].
+
 In your solution, focus on correctness. The performance of your solution will not be the focus of the assessment.
 
 ---
